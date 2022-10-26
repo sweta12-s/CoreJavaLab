@@ -46,7 +46,7 @@ public class App {
 
 		// declaring varible choice
 		try {
-			int ch = 0; // declaring ch=0
+			int ch = 0; // initializing value ch=0
 			do {
 				menu();
 				ch = sc1.nextInt();

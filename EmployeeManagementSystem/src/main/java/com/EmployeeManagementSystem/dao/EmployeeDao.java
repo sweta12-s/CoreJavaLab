@@ -7,7 +7,7 @@ import com.EmployeeManagementSystem.model.Employee;
 //declaring interface of employeeDao
 public interface EmployeeDao {
 
-	// initializing
+	// declaring
 	void addEmployee();
 
 	boolean deleteEmployee(int id);
