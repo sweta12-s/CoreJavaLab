@@ -24,6 +24,8 @@ Pname: Java Desktop, Java Web, PHP, Python, AWS
 Budget: 10,000- 50,000
 Location: New Delhi, Mumbai, Chennai dept
 
+SQL QUERY BY SWETA DAS
+
 Enter password: ****
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 28
