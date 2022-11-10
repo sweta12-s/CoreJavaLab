@@ -1,0 +1,315 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 30
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+@Author : Sweta Das
+@Date: 10.11.2022
+
+mysql> create database MyStudentTable;
+Query OK, 1 row affected (33.52 sec)
+
+mysql> use MyStudentTable;
+Database changed
+mysql> create table students(
+    -> stu_id int primary key not null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> create table students(
+    -> stu_id int primary key not null,
+    -> stu_name varchar(30) not null,
+    -> course_name varchar(25) not null);
+Query OK, 0 rows affected (7.65 sec)
+
+mysql> desc students;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| stu_id      | int         | NO   | PRI | NULL    |       |
+| stu_name    | varchar(30) | NO   |     | NULL    |       |
+| course_name | varchar(25) | NO   |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (1.61 sec)
+
+mysql> create table officers(
+    -> offi_id int primary key not null,
+    -> offi_name varchar(30) not null,
+    -> address varchar(25) not null);
+Query OK, 0 rows affected (7.33 sec)
+
+mysql> desc officers;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| offi_id   | int         | NO   | PRI | NULL    |       |
+| offi_name | varchar(30) | NO   |     | NULL    |       |
+| address   | varchar(25) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (1.41 sec)
+
+mysql> insert into offficers values(1,"Sweta","Mumbai");
+ERROR 1146 (42S02): Table 'mystudenttable.offficers' doesn't exist
+mysql> insert into officers values(01,"Sweta","Mumbai");
+Query OK, 1 row affected (2.75 sec)
+
+mysql> insert into officers values(02,"Rahul","Delhi");
+Query OK, 1 row affected (1.11 sec)
+
+mysql> insert into officers values(03,"Riya","Kolkata");
+Query OK, 1 row affected (0.28 sec)
+
+mysql> insert into officers values(04,"Dev","London");
+Query OK, 1 row affected (0.30 sec)
+
+mysql> select*from officers;
++---------+-----------+---------+
+| offi_id | offi_name | address |
++---------+-----------+---------+
+|       1 | Sweta     | Mumbai  |
+|       2 | Rahul     | Delhi   |
+|       3 | Riya      | Kolkata |
+|       4 | Dev       | London  |
++---------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into students values(01,"Swasata","JAVA");
+Query OK, 1 row affected (1.29 sec)
+
+mysql> insert into students values(02,"Subham","Node_Js");
+Query OK, 1 row affected (0.31 sec)
+
+mysql> insert into students values(03,"Lily","Software_Development");
+Query OK, 1 row affected (0.30 sec)
+
+mysql> inert into students values(04,"John","C");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inert into students values(04,"John","C")' at line 1
+mysql> insert into students values(04, "John", "React");
+Query OK, 1 row affected (0.24 sec)
+
+mysql> select*from students;
++--------+----------+----------------------+
+| stu_id | stu_name | course_name          |
++--------+----------+----------------------+
+|      1 | Swasata  | JAVA                 |
+|      2 | Subham   | Node_Js              |
+|      3 | Lily     | Software_Development |
+|      4 | John     | React                |
++--------+----------+----------------------+
+4 rows in set (0.41 sec)
+
+mysql> select officers.offi_name, officers.address, students.stu_name, students.course_name
+    -> from officers
+    -> INNER JOIN students
+    -> ON officers.offi_id = students.stu_id;
++-----------+---------+----------+----------------------+
+| offi_name | address | stu_name | course_name          |
++-----------+---------+----------+----------------------+
+| Sweta     | Mumbai  | Swasata  | JAVA                 |
+| Rahul     | Delhi   | Subham   | Node_Js              |
+| Riya      | Kolkata | Lily     | Software_Development |
+| Dev       | London  | John     | React                |
++-----------+---------+----------+----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select officers.offi_name, students.stu_id;
+ERROR 1109 (42S02): Unknown table 'officers' in field list
+mysql> select officers.offi_name, students.stu_name
+    -> from officers
+    -> LEFT JOIN students
+    -> ON officers.offi_id = students.stu_id;
++-----------+----------+
+| offi_name | stu_name |
++-----------+----------+
+| Sweta     | Swasata  |
+| Rahul     | Subham   |
+| Riya      | Lily     |
+| Dev       | John     |
++-----------+----------+
+4 rows in set (0.02 sec)
+
+mysql> select officers.address, students.course_name
+    -> from officers
+    -> RIGHT JOIN students
+    -> ON officers.offi_id - students.stu_id;
++---------+----------------------+
+| address | course_name          |
++---------+----------------------+
+| London  | JAVA                 |
+| Kolkata | JAVA                 |
+| Delhi   | JAVA                 |
+| London  | Node_Js              |
+| Kolkata | Node_Js              |
+| Mumbai  | Node_Js              |
+| London  | Software_Development |
+| Delhi   | Software_Development |
+| Mumbai  | Software_Development |
+| Kolkata | React                |
+| Delhi   | React                |
+| Mumbai  | React                |
++---------+----------------------+
+12 rows in set (0.12 sec)
+
+mysql> select officers.address,students.course_name
+    ->     -> from officers
+    ->     -> RIGHT JOIN students
+    ->     -> ON officers.offi_id = students.stu_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from officers
+    -> RIGHT JOIN students
+    -> ON officers.offi_id = students.s' at line 2
+mysql> select officers.address, students.course_name
+    ->     -> from officers
+    ->     -> RIGHT JOIN students
+    ->     -> ON officers.offi_id = students.stu_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from officers
+    -> RIGHT JOIN students
+    -> ON officers.offi_id = students.s' at line 2
+mysql> select officers.address,students.course_name
+    -> from officers
+    -> RIGHT JOIN students
+    -> ON officers.offi_id = students.stu_id;
++---------+----------------------+
+| address | course_name          |
++---------+----------------------+
+| Mumbai  | JAVA                 |
+| Delhi   | Node_Js              |
+| Kolkata | Software_Development |
+| London  | React                |
++---------+----------------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into students values(05,"Suman","C++");
+Query OK, 1 row affected (0.81 sec)
+
+mysql> insert into students values(06,"Rose","Python");
+Query OK, 1 row affected (0.15 sec)
+
+mysql> select* from students;
++--------+----------+----------------------+
+| stu_id | stu_name | course_name          |
++--------+----------+----------------------+
+|      1 | Swasata  | JAVA                 |
+|      2 | Subham   | Node_Js              |
+|      3 | Lily     | Software_Development |
+|      4 | John     | React                |
+|      5 | Suman    | C++                  |
+|      6 | Rose     | Python               |
++--------+----------+----------------------+
+6 rows in set (0.00 sec)
+
+mysql> select officers.address,students.course_name
+    -> from officers
+    -> RIGHT JOIN students
+    -> ON officers.offi_id = students.stu_id;
++---------+----------------------+
+| address | course_name          |
++---------+----------------------+
+| Mumbai  | JAVA                 |
+| Delhi   | Node_Js              |
+| Kolkata | Software_Development |
+| London  | React                |
+| NULL    | C++                  |
+| NULL    | Python               |
++---------+----------------------+
+6 rows in set (0.00 sec)
+
+mysql> select*from officers full join students;
++---------+-----------+---------+--------+----------+----------------------+
+| offi_id | offi_name | address | stu_id | stu_name | course_name          |
++---------+-----------+---------+--------+----------+----------------------+
+|       4 | Dev       | London  |      1 | Swasata  | JAVA                 |
+|       3 | Riya      | Kolkata |      1 | Swasata  | JAVA                 |
+|       2 | Rahul     | Delhi   |      1 | Swasata  | JAVA                 |
+|       1 | Sweta     | Mumbai  |      1 | Swasata  | JAVA                 |
+|       4 | Dev       | London  |      2 | Subham   | Node_Js              |
+|       3 | Riya      | Kolkata |      2 | Subham   | Node_Js              |
+|       2 | Rahul     | Delhi   |      2 | Subham   | Node_Js              |
+|       1 | Sweta     | Mumbai  |      2 | Subham   | Node_Js              |
+|       4 | Dev       | London  |      3 | Lily     | Software_Development |
+|       3 | Riya      | Kolkata |      3 | Lily     | Software_Development |
+|       2 | Rahul     | Delhi   |      3 | Lily     | Software_Development |
+|       1 | Sweta     | Mumbai  |      3 | Lily     | Software_Development |
+|       4 | Dev       | London  |      4 | John     | React                |
+|       3 | Riya      | Kolkata |      4 | John     | React                |
+|       2 | Rahul     | Delhi   |      4 | John     | React                |
+|       1 | Sweta     | Mumbai  |      4 | John     | React                |
+|       4 | Dev       | London  |      5 | Suman    | C++                  |
+|       3 | Riya      | Kolkata |      5 | Suman    | C++                  |
+|       2 | Rahul     | Delhi   |      5 | Suman    | C++                  |
+|       1 | Sweta     | Mumbai  |      5 | Suman    | C++                  |
+|       4 | Dev       | London  |      6 | Rose     | Python               |
+|       3 | Riya      | Kolkata |      6 | Rose     | Python               |
+|       2 | Rahul     | Delhi   |      6 | Rose     | Python               |
+|       1 | Sweta     | Mumbai  |      6 | Rose     | Python               |
++---------+-----------+---------+--------+----------+----------------------+
+24 rows in set (0.47 sec)
+
+mysql> select * from officers full join students;
++---------+-----------+---------+--------+----------+----------------------+
+| offi_id | offi_name | address | stu_id | stu_name | course_name          |
++---------+-----------+---------+--------+----------+----------------------+
+|       4 | Dev       | London  |      1 | Swasata  | JAVA                 |
+|       3 | Riya      | Kolkata |      1 | Swasata  | JAVA                 |
+|       2 | Rahul     | Delhi   |      1 | Swasata  | JAVA                 |
+|       1 | Sweta     | Mumbai  |      1 | Swasata  | JAVA                 |
+|       4 | Dev       | London  |      2 | Subham   | Node_Js              |
+|       3 | Riya      | Kolkata |      2 | Subham   | Node_Js              |
+|       2 | Rahul     | Delhi   |      2 | Subham   | Node_Js              |
+|       1 | Sweta     | Mumbai  |      2 | Subham   | Node_Js              |
+|       4 | Dev       | London  |      3 | Lily     | Software_Development |
+|       3 | Riya      | Kolkata |      3 | Lily     | Software_Development |
+|       2 | Rahul     | Delhi   |      3 | Lily     | Software_Development |
+|       1 | Sweta     | Mumbai  |      3 | Lily     | Software_Development |
+|       4 | Dev       | London  |      4 | John     | React                |
+|       3 | Riya      | Kolkata |      4 | John     | React                |
+|       2 | Rahul     | Delhi   |      4 | John     | React                |
+|       1 | Sweta     | Mumbai  |      4 | John     | React                |
+|       4 | Dev       | London  |      5 | Suman    | C++                  |
+|       3 | Riya      | Kolkata |      5 | Suman    | C++                  |
+|       2 | Rahul     | Delhi   |      5 | Suman    | C++                  |
+|       1 | Sweta     | Mumbai  |      5 | Suman    | C++                  |
+|       4 | Dev       | London  |      6 | Rose     | Python               |
+|       3 | Riya      | Kolkata |      6 | Rose     | Python               |
+|       2 | Rahul     | Delhi   |      6 | Rose     | Python               |
+|       1 | Sweta     | Mumbai  |      6 | Rose     | Python               |
++---------+-----------+---------+--------+----------+----------------------+
+24 rows in set (0.00 sec)
+
+mysql> select * from officers cross join students;
++---------+-----------+---------+--------+----------+----------------------+
+| offi_id | offi_name | address | stu_id | stu_name | course_name          |
++---------+-----------+---------+--------+----------+----------------------+
+|       4 | Dev       | London  |      1 | Swasata  | JAVA                 |
+|       3 | Riya      | Kolkata |      1 | Swasata  | JAVA                 |
+|       2 | Rahul     | Delhi   |      1 | Swasata  | JAVA                 |
+|       1 | Sweta     | Mumbai  |      1 | Swasata  | JAVA                 |
+|       4 | Dev       | London  |      2 | Subham   | Node_Js              |
+|       3 | Riya      | Kolkata |      2 | Subham   | Node_Js              |
+|       2 | Rahul     | Delhi   |      2 | Subham   | Node_Js              |
+|       1 | Sweta     | Mumbai  |      2 | Subham   | Node_Js              |
+|       4 | Dev       | London  |      3 | Lily     | Software_Development |
+|       3 | Riya      | Kolkata |      3 | Lily     | Software_Development |
+|       2 | Rahul     | Delhi   |      3 | Lily     | Software_Development |
+|       1 | Sweta     | Mumbai  |      3 | Lily     | Software_Development |
+|       4 | Dev       | London  |      4 | John     | React                |
+|       3 | Riya      | Kolkata |      4 | John     | React                |
+|       2 | Rahul     | Delhi   |      4 | John     | React                |
+|       1 | Sweta     | Mumbai  |      4 | John     | React                |
+|       4 | Dev       | London  |      5 | Suman    | C++                  |
+|       3 | Riya      | Kolkata |      5 | Suman    | C++                  |
+|       2 | Rahul     | Delhi   |      5 | Suman    | C++                  |
+|       1 | Sweta     | Mumbai  |      5 | Suman    | C++                  |
+|       4 | Dev       | London  |      6 | Rose     | Python               |
+|       3 | Riya      | Kolkata |      6 | Rose     | Python               |
+|       2 | Rahul     | Delhi   |      6 | Rose     | Python               |
+|       1 | Sweta     | Mumbai  |      6 | Rose     | Python               |
++---------+-----------+---------+--------+----------+----------------------+
+24 rows in set (0.62 sec)
+
+mysql>
